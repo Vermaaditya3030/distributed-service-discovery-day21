@@ -1,0 +1,16 @@
+services:
+  discovery-server:
+    build: {context: ., dockerfile: discovery-server/Dockerfile}
+    ports: ["8761:8761"]
+  order-service:
+    build: {context: ., dockerfile: order-service/Dockerfile}
+    ports: ["8081:8081"]
+    depends_on: [discovery-server]
+  inventory-service:
+    build: {context: ., dockerfile: inventory-service/Dockerfile}
+    ports: ["8082:8082"]
+    depends_on: [discovery-server]
+  api-gateway:
+    build: {context: ., dockerfile: api-gateway/Dockerfile}
+    ports: ["8080:8080"]
+    depends_on: [discovery-server, order-service, inventory-service]
